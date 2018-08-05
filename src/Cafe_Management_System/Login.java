@@ -21,7 +21,9 @@ import javax.swing.JOptionPane;
  * @author user
  */
 public class Login extends javax.swing.JFrame {
-private Connection conn;
+
+    private Connection conn;
+
     /**
      * Creates new form Login
      */
@@ -149,21 +151,32 @@ private Connection conn;
     }// </editor-fold>//GEN-END:initComponents
 
     private void bloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bloginActionPerformed
-       
+
         try {
-            String u=txtuser.getText();
-            String p=new String(txtpass.getPassword());
-            Connection conn=new CafeDAO().connect();
-            if(new CafeDAO().checkLogin(u, p, conn)){
-                new Cafe_Management_System().setVisible(true);
-                this.dispose();
-            }else{
-                JOptionPane.showMessageDialog(null, "Login Fail");
+            String u = txtuser.getText();
+            String p = new String(txtpass.getPassword());
+            Connection conn = new CafeDAO().connect();
+            if (new CafeDAO().checkLogin(u, p, conn)) {
+                try{
+                int i = new CafeDAO().checkRoles(u, p, conn);
+                if (i == 1) {
+                    new Cafe_Management_System().setVisible(true);
+                    this.dispose();
+                }
+
+                if (i == 2) {
+                    new Summary_Day().setVisible(true);
+                    this.dispose();
+                }
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+                
             }
+
         } catch (Exception e) {
             System.out.println(e);
         }
-       
     }//GEN-LAST:event_bloginActionPerformed
 
     private void bcancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcancelActionPerformed
